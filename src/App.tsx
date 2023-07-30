@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Geolocation from "./Geolocation";
+import CurrentPollens from "./CurrentPollens";
+import "./App.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-function App() {
+export interface Position {
+  lat: number;
+  lng: number;
+}
+
+const App = () => {
+  const [currentPosition, setCurrentPosition] = useState<Position>({ lat: 0, lng: 0 });
+
+  axios.defaults.headers.common = {
+    "X-API-Key": "790943f855370562d5aa86c3155c3f5d410a64ec864198970b4cd3c0fae10457",
+  };
+
+  useEffect(() => {
+    axios
+      .get("https://api.ambeedata.com/latest/pollen/by-lat-lng?", { params: { lat: currentPosition.lat, lng: currentPosition.lng } })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Geolocation setCurrentPosition={setCurrentPosition} />
+      <CurrentPollens currentPosition={currentPosition} />
     </div>
   );
-}
+};
 
 export default App;
