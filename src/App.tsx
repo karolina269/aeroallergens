@@ -1,16 +1,13 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import AppRoutes from "./routes/AppRoutes";
 import AppNav from "./AppNav";
 import { Position } from "./types";
 
+export const apiKey = "f725f7a5541372fde5cdb7ba8617f97b";
+
 const App = () => {
   const [currentPosition, setCurrentPosition] = useState<Position>({ lat: 0, lng: 0 });
-
-  axios.defaults.headers.common = {
-    apikey: "685f8ce4562c7576362c57db178be0da",
-  };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
