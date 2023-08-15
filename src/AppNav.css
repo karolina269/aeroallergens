@@ -1,0 +1,12 @@
+.mainNav .mainNavList {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  list-style: none;
+}
+
+.mainNav .mainNavList a {
+  text-decoration: none;
+  font-weight: 600;
+}

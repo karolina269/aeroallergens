@@ -1,34 +1,46 @@
-import Geolocation from "./Geolocation";
-import CurrentPollens from "./CurrentPollens";
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-
-export interface Position {
-  lat: number;
-  lng: number;
-}
+import AppRoutes from "./routes/AppRoutes";
+import AppNav from "./AppNav";
+import { Position } from "./types";
 
 const App = () => {
   const [currentPosition, setCurrentPosition] = useState<Position>({ lat: 0, lng: 0 });
 
   axios.defaults.headers.common = {
-    "X-API-Key": "790943f855370562d5aa86c3155c3f5d410a64ec864198970b4cd3c0fae10457",
+    apikey: "685f8ce4562c7576362c57db178be0da",
   };
 
   useEffect(() => {
-    axios
-      .get("https://api.ambeedata.com/latest/pollen/by-lat-lng?", { params: { lat: currentPosition.lat, lng: currentPosition.lng } })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => console.log(error));
+    navigator.geolocation.getCurrentPosition((position) => {
+      setCurrentPosition({ lat: Math.round(position.coords.latitude * 100) / 100, lng: Math.round(position.coords.longitude * 100) / 100 });
+    });
   }, []);
 
   return (
     <div className="App">
-      <Geolocation setCurrentPosition={setCurrentPosition} />
-      <CurrentPollens currentPosition={currentPosition} />
+      <AppNav />
+      <section className="position">
+        <h3>position:</h3>
+        <label htmlFor="lat">lat</label>
+        <input
+          id="lat"
+          value={currentPosition.lat}
+          min="-90"
+          max="90"
+          onChange={(e) => setCurrentPosition({ ...currentPosition, lat: Number(e.target.value) })}
+        />
+        <label htmlFor="lng">lng</label>
+        <input
+          id="lng"
+          value={currentPosition.lng}
+          min="-180"
+          max="180"
+          onChange={(e) => setCurrentPosition({ ...currentPosition, lng: Number(e.target.value) })}
+        />
+      </section>
+      <AppRoutes currentPosition={currentPosition} />
     </div>
   );
 };

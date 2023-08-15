@@ -1,1 +1,6 @@
-export {};
+export interface Position {
+  lat: number;
+  lng: number;
+}
+
+export interface PollutionData {}
