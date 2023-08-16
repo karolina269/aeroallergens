@@ -2,9 +2,16 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import AppRoutes from "./routes/AppRoutes";
 import AppNav from "./AppNav";
-import { Position } from "./types";
+import { Position, Pollutants } from "./types";
 
-export const apiKey = "f725f7a5541372fde5cdb7ba8617f97b";
+export const airQualityStandards: Pollutants = {
+  co: 10,
+  no2: 25,
+  o3: 100,
+  pm2_5: 15,
+  pm10: 45,
+  so2: 40,
+};
 
 const App = () => {
   const [currentPosition, setCurrentPosition] = useState<Position>({ lat: 0, lng: 0 });

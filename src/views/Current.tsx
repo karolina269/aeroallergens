@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Position, PollutionData } from "../types";
+import { Position, PollutionData, AirQualityIndex } from "../types";
 import axios from "axios";
 import { Chart } from "chart.js";
-import { apiKey } from "../App";
+import { apiKey } from "../config";
+import { airQualityStandards } from "../App";
 
 interface CurrentPollutionProps {
   currentPosition: Position;
@@ -14,8 +15,6 @@ const Current = (props: CurrentPollutionProps) => {
     dt: "",
     components: {
       co: 0,
-      nh3: 0,
-      no: 0,
       no2: 0,
       o3: 0,
       pm2_5: 0,
@@ -41,16 +40,26 @@ const Current = (props: CurrentPollutionProps) => {
     <section className="currentPollution">
       <h2>Current</h2>
       <h3>Date: {currentPollution.dt}</h3>
-      <h3>Air Quality Index: {currentPollution.aqi}</h3>
+      <h3>Air Quality: {AirQualityIndex[currentPollution.aqi]}</h3>
       <ul>
-        <li>CO: {currentPollution.components.co}</li>
-        <li>NH3: {currentPollution.components.nh3}</li>
-        <li>NO: {currentPollution.components.no}</li>
-        <li>NO2: {currentPollution.components.no2}</li>
-        <li>O3: {currentPollution.components.o3}</li>
-        <li>PM2.5: {currentPollution.components.pm2_5}</li>
-        <li>PM10: {currentPollution.components.pm10}</li>
-        <li>SO2: {currentPollution.components.so2}</li>
+        <li>
+          CO: {currentPollution.components.co} µg/m3, standard: {airQualityStandards.co} µg/m3
+        </li>
+        <li>
+          NO2: {currentPollution.components.no2} µg/m3, standard: {airQualityStandards.no2} µg/m3
+        </li>
+        <li>
+          O3: {currentPollution.components.o3} µg/m3, standard: {airQualityStandards.o3} µg/m3
+        </li>
+        <li>
+          PM2.5: {currentPollution.components.pm2_5} µg/m3, standard: {airQualityStandards.pm2_5} µg/m3
+        </li>
+        <li>
+          PM10: {currentPollution.components.pm10} µg/m3, standard: {airQualityStandards.pm10} µg/m3
+        </li>
+        <li>
+          SO2: {currentPollution.components.so2} µg/m3, standard: {airQualityStandards.so2} µg/m3
+        </li>
       </ul>
     </section>
   );
