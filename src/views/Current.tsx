@@ -16,7 +16,7 @@ const Current = (props: CurrentPollutionProps) => {
   const chartRef = useRef<any>(null);
   const [chartInstance, setChartInstance] = useState<any>(null);
   const [currentPollution, setCurrentPollution] = useState<PollutionData>({
-    aqi: 1,
+    aqi: 2,
     dt: "",
     components: {
       co: 0,
@@ -37,9 +37,13 @@ const Current = (props: CurrentPollutionProps) => {
         console.log(res.data);
         const date = new Date(res.data.list[0].dt * 1000).toUTCString();
         setCurrentPollution({ aqi: res.data.list[0].main.aqi, dt: date, components: res.data.list[0].components });
-        drawChartWithNeedle();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        drawChartWithNeedle(); // because of 429 (Too Many Requests)
+      });
   }, [props]);
 
   const data = {
@@ -76,26 +80,30 @@ const Current = (props: CurrentPollutionProps) => {
   };
 
   const drawNeedle = (chart: any) => {
+    if (!chart) {
+      return;
+    }
     const aqi = currentPollution.aqi;
     const needleValue = (180 / 5) * aqi - 180 / 10;
-    const center = chart.chartArea;
-    const ctx = chart.ctx;
+    const center = chart.chart.chartArea;
+    console.log(center);
+    const ctx = chart.chart.ctx;
     ctx.save();
-    ctx.translate(center.width / 2 + center.left, center.height / 2 + center.top);
-    ctx.rotate((Math.PI / 180) * (needleValue - 90)); // Rotate the needle to the corresponding value
+    ctx.translate(center.left + center.width / 2, center.height / 1.15);
+    ctx.rotate((Math.PI / 180) * (needleValue - 90));
     ctx.beginPath();
-    ctx.moveTo(0, -10);
+    ctx.moveTo(0, -150);
     ctx.lineTo(5, 0);
-    ctx.lineTo(0, 10);
+    ctx.lineTo(0, 0);
     ctx.lineTo(-5, 0);
     ctx.closePath();
-    // ctx.fillStyle = "black";
+    ctx.fillStyle = "black";
     ctx.fill();
     ctx.restore();
   };
 
   const drawChartWithNeedle = () => {
-    if (currentPollution.aqi && chartRef.current) {
+    if (chartRef.current) {
       if (chartInstance) {
         chartInstance.destroy();
       }
@@ -104,7 +112,6 @@ const Current = (props: CurrentPollutionProps) => {
         data: data,
         options: options,
       });
-      drawNeedle(newChartInstance);
       setChartInstance(newChartInstance);
     }
   };
@@ -113,11 +120,9 @@ const Current = (props: CurrentPollutionProps) => {
     <section className="currentPollution">
       <h2>Current</h2>
       <h3>Date: {currentPollution.dt}</h3>
-      <h3>Air Quality:</h3>
+      <h3>Air Quality: {AirQualityIndex[currentPollution.aqi]}</h3>
       <div className="airQualityChart">
-        {/* <Doughnut data={data} options={options} /> */}
         <canvas ref={chartRef} />
-        {AirQualityIndex[currentPollution.aqi]}
       </div>
       <ul>
         <li>
