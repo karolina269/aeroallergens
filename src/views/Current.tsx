@@ -13,7 +13,7 @@ interface CurrentPollutionProps {
 ChartJS.register(DoughnutController, ArcElement, Tooltip, Legend);
 
 const Current = (props: CurrentPollutionProps) => {
-  const chartRef = useRef<any>(null);
+  const canvasChartRef = useRef<any>(null);
   const [chartInstance, setChartInstance] = useState<any>(null);
   const [currentPollution, setCurrentPollution] = useState<PollutionData>({
     aqi: 2,
@@ -46,6 +46,14 @@ const Current = (props: CurrentPollutionProps) => {
       });
   }, [props]);
 
+  useEffect(() => {
+    return () => {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+    };
+  }, [chartInstance]);
+
   const data = {
     labels: Object.keys(AirQualityIndex).filter((key) => /^[A-Z]/.test(key)),
     datasets: [
@@ -77,6 +85,7 @@ const Current = (props: CurrentPollutionProps) => {
         drawNeedle(chart);
       },
     },
+    events: [],
   };
 
   const drawNeedle = (chart: any) => {
@@ -102,16 +111,19 @@ const Current = (props: CurrentPollutionProps) => {
     ctx.restore();
   };
 
+  const chartIdRef = useRef<any>(null);
+
   const drawChartWithNeedle = () => {
-    if (chartRef.current) {
-      if (chartInstance) {
-        chartInstance.destroy();
+    if (canvasChartRef.current) {
+      if (chartIdRef.current !== null) {
+        return;
       }
-      const newChartInstance = new ChartJS(chartRef.current, {
+      const newChartInstance = new ChartJS(canvasChartRef.current, {
         type: "doughnut",
         data: data,
         options: options,
       });
+      chartIdRef.current = newChartInstance.id;
       setChartInstance(newChartInstance);
     }
   };
@@ -122,7 +134,7 @@ const Current = (props: CurrentPollutionProps) => {
       <h3>Date: {currentPollution.dt}</h3>
       <h3>Air Quality: {AirQualityIndex[currentPollution.aqi]}</h3>
       <div className="airQualityChart">
-        <canvas ref={chartRef} />
+        <canvas ref={canvasChartRef} />
       </div>
       <ul>
         <li>
