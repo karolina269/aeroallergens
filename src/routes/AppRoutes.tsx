@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Historical from "../views/Historical";
 import Forecast from "../views/Forecast";
-import Current from "../views/Current";
+import Current from "../views/Current/Current";
 import { Position } from "../types";
 
 interface AppRoutesProps {
