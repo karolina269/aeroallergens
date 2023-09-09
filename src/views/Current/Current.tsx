@@ -32,7 +32,18 @@ const Current = (props: CurrentPollutionProps) => {
       )
       .then((res) => {
         const date = new Date(res.data.list[0].dt * 1000).toUTCString();
-        setCurrentPollution({ aqi: res.data.list[0].main.aqi, dt: date, components: res.data.list[0].components });
+        setCurrentPollution({
+          aqi: res.data.list[0].main.aqi,
+          dt: date,
+          components: {
+            co: res.data.list[0].components.co,
+            no2: res.data.list[0].components.no2,
+            o3: res.data.list[0].components.o3,
+            pm2_5: res.data.list[0].components.pm2_5,
+            pm10: res.data.list[0].components.pm10,
+            so2: res.data.list[0].components.so2,
+          },
+        });
         setDataReceived(true);
       })
       .catch((error) => {

@@ -5,7 +5,7 @@ import AppNav from "./AppNav";
 import { Position, Pollutants } from "./types";
 
 export const airQualityStandards: Pollutants = {
-  co: 10,
+  co: 10000,
   no2: 25,
   o3: 100,
   pm2_5: 15,

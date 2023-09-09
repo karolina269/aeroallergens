@@ -17,8 +17,6 @@ data presentation, charts, ui
 
 ### How to run the application:
 
-Visit https://cors-anywhere.herokuapp.com/ and click button "Request temporary access to the demo server"
-
 ```shell
 # clone the git repo
 git clone https://github.com/karolina269/air-pollution.git
@@ -28,3 +26,5 @@ npm install
 npm start
 
 ```
+
+Visit https://cors-anywhere.herokuapp.com/ and click button "Request temporary access to the demo server"
