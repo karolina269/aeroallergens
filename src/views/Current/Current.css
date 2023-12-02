@@ -2,3 +2,8 @@
   max-width: 400px;
   margin: auto;
 }
+
+.currentPollutantsChart {
+  max-width: 800px;
+  margin: auto;
+}

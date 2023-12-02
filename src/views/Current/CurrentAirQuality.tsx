@@ -100,13 +100,13 @@ const CurrentAirQuality = (props: CurrentAirQuality) => {
     }
   };
   return (
-    <>
+    <section className="currentAirQuality">
       {" "}
       <h3>Air Quality: {AirQualityIndex[props.aqi]}</h3>
       <div className="airQualityChart">
         <canvas ref={canvasChartRef} />
       </div>
-    </>
+    </section>
   );
 };
 
