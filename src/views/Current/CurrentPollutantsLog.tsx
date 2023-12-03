@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, LogarithmicScale, LogarithmicScaleOptions, BarElement, Title, Tooltip, Legend } from "chart.js";
+import { Bar, Chart } from "react-chartjs-2";
 import { airQualityStandards } from "../../App";
 import { Pollutants } from "../../types";
 
@@ -8,39 +8,39 @@ interface CurrentPollutantsProps {
   pollutants: Pollutants;
 }
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, LogarithmicScale, BarElement, Title, Tooltip, Legend);
 
 const CurrentPollutants = (props: CurrentPollutantsProps) => {
   const data = {
     labels: Object.keys(props.pollutants),
     datasets: [
       {
-        label: "Current pollutants - percentage of the safe level",
-        data: Object.values(props.pollutants).map((value, index) => (value / Object.values(airQualityStandards)[index]) * 100),
-        backgroundColor: function (context) {
-          var value = context.dataset.data[context.dataIndex];
-          return value > 100 ? "rgb(255,0,0)" : "rgb(0,228,0)";
-        },
+        label: "Current pollutants",
+        data: Object.values(props.pollutants),
+        backgroundColor: "rgba(75, 192, 192, 1)",
         borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 1,
+      },
+      {
+        label: "Safe level",
+        data: Object.values(airQualityStandards),
+        backgroundColor: "rgba(192, 192, 192, 0.5)",
+        borderColor: "rgba(192, 192, 192, 0.5)",
         borderWidth: 1,
       },
     ],
   };
 
   const options = {
-    indexAxis: "y",
     scales: {
       x: {
-        min: 0,
-        max: 100,
-        // grid: {
-        //   display: false,
-        // },
+        stacked: true,
       },
       y: {
-        grid: {
-          display: false,
-        },
+        display: true,
+        type: "logarithmic",
+        min: 0,
+        max: 10000,
       },
     },
   };
@@ -48,7 +48,7 @@ const CurrentPollutants = (props: CurrentPollutantsProps) => {
   return (
     <section className="currentPollutants">
       <div className="currentPollutantsChart">
-        <Bar data={data} options={options} />
+        <Chart type="bar" data={data} options={options} />
       </div>
       <ul>
         <li>
