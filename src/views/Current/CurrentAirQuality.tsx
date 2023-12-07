@@ -52,6 +52,9 @@ const CurrentAirQuality = (props: CurrentAirQuality) => {
       tooltip: {
         enabled: false,
       },
+      datalabels: {
+        display: false,
+      },
     },
     animation: {
       onComplete: (chart: any) => {
