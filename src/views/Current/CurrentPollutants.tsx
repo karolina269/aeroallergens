@@ -32,15 +32,22 @@ const CurrentPollutants = (props: CurrentPollutantsProps) => {
     indexAxis: "y",
     plugins: {
       datalabels: {
-        anchor: "bottom", // Określa, gdzie powinna być umieszczona etykieta (end - na końcu słupka)
-        align: "center", // Określa, jak etykieta ma być wyrównana względem słupka
+        anchor: "bottom",
+        align: function (context) {
+          // Dostosuj align w zależności od wartości
+          if (context.dataset.data[context.dataIndex] < 5) {
+            return "end";
+          } else {
+            return "center";
+          }
+        },
         display: true,
         color: "black",
         font: {
           weight: "bold",
         },
         formatter: function (value) {
-          return value + "%"; // Dodanie symbolu procenta do etykiety
+          return value + "%";
         },
       },
     },
