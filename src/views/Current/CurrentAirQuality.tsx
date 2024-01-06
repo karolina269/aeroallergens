@@ -16,6 +16,8 @@ const CurrentAirQuality = (props: CurrentAirQuality) => {
   useEffect(() => {
     if (props.dataReceived) {
       drawChartWithNeedle();
+    } else {
+      console.log("no data");
     }
   }, [props.aqi]);
 

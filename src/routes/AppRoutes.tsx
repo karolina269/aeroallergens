@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Historical from "../views/Historical";
-import Forecast from "../views/Forecast";
+import Forecast from "../views/Forecast/Forecast";
 import Current from "../views/Current/Current";
 import { Position } from "../types";
 

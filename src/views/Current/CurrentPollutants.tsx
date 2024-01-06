@@ -34,7 +34,6 @@ const CurrentPollutants = (props: CurrentPollutantsProps) => {
       datalabels: {
         anchor: "bottom",
         align: function (context) {
-          // Dostosuj align w zależności od wartości
           if (context.dataset.data[context.dataIndex] < 5) {
             return "end";
           } else {
